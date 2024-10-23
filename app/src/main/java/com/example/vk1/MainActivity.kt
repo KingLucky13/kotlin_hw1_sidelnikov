@@ -7,17 +7,45 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-    private var data = mutableListOf(0,1,2,3,4,5,6)
 
+    /**
+     * Глобальные изменяемые (var) переменные это плохой подход.
+     * Да и хранить список тут как будто смысла нет.
+     *
+     * Предлагаю оставить тут изменяемую переменную, но поменять на squaresCount.
+     * В onCreate тогда будет val data = MutableList(it.getInt("num")){it}
+     *
+     * Кстати переменные лучше называть понятнее, что такое data - неясно
+     */
+    private var data = mutableListOf(0,1,2,3,4,5,6)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        /**
+         * В kotlin code style принято использовать конструкции с let
+         * savedInstanceState?.let {
+         *    data = MutableList(it.getInt("num")){it}
+         * }
+         */
         if (savedInstanceState != null) {
             data = MutableList(savedInstanceState.getInt("num")){it}
         }
         val customAdapter = CustomAdapter(data)
+
+        /**
+         * findViewById
+         * Returns: a view with given ID if found, or null otherwise
+         *
+         * Формально нужно использовать:
+         * val recyclerView: RecyclerView? = findViewById(R.id.recycler)
+         */
         val recyclerView: RecyclerView = findViewById(R.id.recycler)
+        /**
+         * Предложил бы заинлайнить
+         * recyclerView.adapter = CustomAdapter(data)
+         */
         recyclerView.adapter = customAdapter
         val button:Button = findViewById(R.id.button)
         button.setOnClickListener{
@@ -28,6 +56,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
 
+        /**
+         * Ключ по-хорошему нужно выделить в константу тк используется в нескольких местах
+         */
         outState.putInt("num",data.size)
         super.onSaveInstanceState(outState)
 
