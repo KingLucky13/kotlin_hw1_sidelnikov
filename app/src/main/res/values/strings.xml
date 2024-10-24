@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">vk1</string>
-    <string name="buttonText">+</string>
+    <string name="buttonText">добавить</string>
+    <integer name="spanCount">3</integer>
 </resources>

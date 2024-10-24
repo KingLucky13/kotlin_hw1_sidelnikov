@@ -7,28 +7,32 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-    private var data = mutableListOf(0,1,2,3,4,5,6)
-
+    private var squareCount = 0
+    private val squaresCountKey = "squareCount"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (savedInstanceState != null) {
-            data = MutableList(savedInstanceState.getInt("num")){it}
+        savedInstanceState?.let{
+            squareCount = savedInstanceState.getInt(squaresCountKey)
         }
-        val customAdapter = CustomAdapter(data)
-        val recyclerView: RecyclerView = findViewById(R.id.recycler)
-        recyclerView.adapter = customAdapter
-        val button:Button = findViewById(R.id.button)
-        button.setOnClickListener{
-            data.add(data.size)
-            customAdapter.notifyItemInserted(data.size-1)
+
+        var squareNumbers = MutableList(squareCount){it}
+        val squareAdapter = SquareAdapter(squareNumbers)
+        val recyclerView: RecyclerView? = findViewById(R.id.recycler)
+        recyclerView?.adapter = squareAdapter
+
+        val button:Button? = findViewById(R.id.button)
+        button?.setOnClickListener{
+            squareNumbers.add(squareCount)
+            squareAdapter.notifyItemInserted(squareCount)
+            squareCount += 1
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
 
-        outState.putInt("num",data.size)
+        outState.putInt(squaresCountKey,squareCount)
         super.onSaveInstanceState(outState)
 
     }
